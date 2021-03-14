@@ -14,5 +14,8 @@
       "name": "dnd5e",
       "type": "system"
     }
-  ]
+  ],
+  "url": "https://github.com/kbongcas/combat-tracker-enhancements",
+	"manifest": "https://raw.githubusercontent.com/kbongcas/combat-tracker-enhancements/main/module.json",
+	"download": "https://github.com/kbongcas/combat-tracker-enhancements/archive/main.zip"
 }
