@@ -1,0 +1,10 @@
+{
+  "name": "combat-tracker-enhancements",
+  "title": "Combat Tracker Enhancements",
+  "description": "A module that makes enhancements to the combat tracker.",
+  "author": "kbongcas",
+  "version": "0.1.0",
+  "minimumCoreVersion": "0.5.0",
+  "systems": ["dnd5e"],
+  "esmodules": ["./scripts/index.js"]
+}
