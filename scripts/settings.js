@@ -27,22 +27,13 @@ class Settings {
             default: true
         });
 
-        game.settings.register(Constants.MODULE.NAME, "upNextSettings2", {
-            name: "Up next Message",
-            hint: "The private message that the player will receive when up next in the turn order.",
-            scope: "world",
-            config: true,
-            type: String,
-            default: true,
-        });
-
-        game.settings.register(Constants.MODULE.NAME, "upNextSettings", {
+        game.settings.register(Constants.MODULE.NAME, Constants.SETTINGS.ALERT_NEXT_IN_COMBAT, {
             name: "Up next",
             hint: "Private message the player that is next in the turn order.",
             scope: "world",
-            config: true,
+            config: false,
             type: Boolean,
-            default: true,
+            default: false,
         });
     }
 

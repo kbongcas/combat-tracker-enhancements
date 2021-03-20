@@ -30,7 +30,7 @@ class CTChatEnhancements {
             isInitiativeRoll = messageData.data.flags.core.initiativeRoll;
         }
         catch (err) {
-            initiativeRoll = false;
+            isInitiativeRoll = false;
         }
         if (isInitiativeRoll) {
             // change alias
@@ -59,40 +59,30 @@ class CTChatEnhancements {
         }
     }
 
+    /**
+     * @TODO
+     * - Still a bit buggy, It is wispering it to the GM and the Other owenes and also rendering
+     * if not th owner of a actor.
+     * @param actor
+     */
+    static alertUpcomingTurn(actor){
+        // ...is not a GM
+        console.log("Render 1")
+        if (game.user.isGM) return;
 
-    static notifyNextPlayer(combat, delta) {
-        //console.log("COMBAT UPDATED: ")
-        //console.log(combat)
-        //console.log(delta)
-        //if(delta.turn === combat.length) {
-        //    if(combat.turns.players > 0){
-        //        combat.turn.players.forEach( user => { 
-        //            user.
-        //        })
-        //    }
-        //}
-        //let d = new Dialog({
-        //    title: "Test Dialog",
-        //    content: "<p>You must choose either Option 1, or Option 2</p>",
-        //    buttons: {
-        //        one: {
-        //            icon: '<i class="fas fa-check"></i>',
-        //            label: "Option One",
-        //            callback: () => console.log("Chose One")
-        //        },
-        //        two: {
-        //            icon: '<i class="fas fa-times"></i>',
-        //            label: "Option Two",
-        //            callback: () => console.log("Chose Two")
-        //        }
-        //    },
-        //    default: "two",
-        //    render: html => console.log("Register interactivity in the rendered dialog"),
-        //    close: html => console.log("This always is logged no matter which option is chosen")
-        //});
-        //d.render(true);
-
-        let c = new ChatMessage();
+        console.log("Render")
+        console.log(actor)
+        let gm = game.users.filter(user => user.isGM)
+        let chatData = {
+            user: gm.id,
+            content: actor.data.name + " is Next in Combat. Please prepare your turn.",
+            whisper: game.users.filter( user => actor.data.permission[`${user.id}`] !== undefined
+                && actor.data.permission[`${user.id}`] === 3
+                && !actor.data.permission[`${user.id}`].isGM
+            )
+        };
+        console.log(chatData)
+        ChatMessage.create(chatData, {});
     }
 }
 
