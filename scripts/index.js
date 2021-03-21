@@ -1,4 +1,5 @@
 import { CTSettings } from "./settings.js"
+import CTDialogEnhancements from "./ct-dialog-enhancements.js"
 import CTChatEnhancements from "./ct-chat-enhancements.js"
 import CTTrackerEnhancements from "./ct-tracker-enhancements.js"
 import Constants from "./constants.js"
@@ -17,27 +18,6 @@ class CombatTrackerEnhancementsHooks {
         }
     }
 
-    // Combat Hooks
-    /**
-     * @TODO - FIX THIS
-     * @param combat
-     * @param delta
-     * @private
-     */
-    /// @TODO - Fix this
-    static _updateCombat(combat, delta) {
-        //console.log("Combat: ", combat)
-        //console.log("Delta: ", delta)
-        //console.log("0: ", combat)
-
-        //let nextInCombat = delta.turn === combat.turns.length-1 ? combat.turns[0].actor : combat.turns[delta.turn+1].actor;
-        //console.log(game.user.id)
-        //console.log(game.user.id)
-        //if(nextInCombat.data.permission[game.user.id] !== undefined || nextInCombat.permission[game.user.id] === ENTITY_PERMISSIONS.OWNER){
-        //    CTChatEnhancements.alertUpcomingTurn(nextInCombat)
-        //}
-    }
-
     // Chat Hooks
     static _createChatMessage(messageData) {
         CTChatEnhancements.createHiddenNamesInChatInitiative(messageData)
@@ -45,6 +25,14 @@ class CombatTrackerEnhancementsHooks {
 
     static _renderChatMessage(messageData, html) {
         CTChatEnhancements.renderHiddenNamesInChatInitiative(messageData, html)
+    }
+
+    //@TODO - Add alerts to game settings
+    static _updateCombat(combat, delta) {
+        // find next person in combat
+        let nextInCombat = delta.turn === combat.turns.length-1 ? combat.turns[0].actor : combat.turns[delta.turn+1].actor;
+        CTChatEnhancements.alertUpcomingTurn(nextInCombat)
+        CTDialogEnhancements.alertUpcomingTurn(nextInCombat)
     }
 
 }

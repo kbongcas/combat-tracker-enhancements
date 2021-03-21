@@ -25,14 +25,8 @@ class CTChatEnhancements {
         if (actor.hasPlayerOwner) return;
 
         // check if initiative roll
-        let isInitiativeRoll = false;
-        try {
-            isInitiativeRoll = messageData.data.flags.core.initiativeRoll;
-        }
-        catch (err) {
-            isInitiativeRoll = false;
-        }
-        if (isInitiativeRoll) {
+        let isInitiativeRoll = messageData.getFlag("core", "initiativeRoll");
+        if (isInitiativeRoll !== undefined && isInitiativeRoll) {
             // change alias
             let originalAlias = messageData.data.speaker.alias;
             messageData.data.speaker.alias = Constants.SETTINGS.UNKNOWN_ALIAS;
@@ -46,42 +40,39 @@ class CTChatEnhancements {
      * @param {} messageData 
      */
     static renderHiddenNamesInChatInitiative(messageData, html) {
-        let isInitiativeRoll = false;
-        try {
-            isInitiativeRoll = messageData.data.flags.core.initiativeRoll;
-        }
-        catch (err) {
-            isInitiativeRoll = false;
-        }
-        if (isInitiativeRoll) {
+        // check if initiative roll
+        let isInitiativeRoll = messageData.getFlag("core", "initiativeRoll");
+        if (isInitiativeRoll !== undefined && isInitiativeRoll) {
+
+            // change text in html
             html.find(".message-sender").text(messageData.data.speaker.alias)
             html.find(".flavor-text").text(messageData.data.flavor)
         }
     }
 
     /**
-     * @TODO
-     * - Still a bit buggy, It is wispering it to the GM and the Other owenes and also rendering
-     * if not th owner of a actor.
-     * @param actor
+     *  Creates a chat message alerting the player that their turn is up nest in the
+     *  turn order.
+     * @param {} actor
      */
     static alertUpcomingTurn(actor){
-        // ...is not a GM
-        console.log("Render 1")
+        // dont alert if...
+
+        // ...is gm
         if (game.user.isGM) return;
 
-        console.log("Render")
-        console.log(actor)
-        let gm = game.users.filter(user => user.isGM)
+        // ...does not have owner permissions
+        if (!(actor.data.permission[`${game.user.id}`] !== undefined
+        && actor.data.permission[`${game.user.id}`] === 3)) return;
+
+        // create message to self
         let chatData = {
-            user: gm.id,
+            user: game.user.id,
             content: actor.data.name + " is Next in Combat. Please prepare your turn.",
-            whisper: game.users.filter( user => actor.data.permission[`${user.id}`] !== undefined
-                && actor.data.permission[`${user.id}`] === 3
-                && !actor.data.permission[`${user.id}`].isGM
-            )
+            whisper: game.users.filter(user => user.id === game.user.id)
         };
-        console.log(chatData)
+
+        // send message
         ChatMessage.create(chatData, {});
     }
 }
